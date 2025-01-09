@@ -2540,6 +2540,9 @@ SLANG_NO_THROW Result SLANG_MCALL
 SLANG_NO_THROW Result SLANG_MCALL GLDevice::createTextureView(
     ITextureResource* texture, IResourceView::Desc const& desc, IResourceView** outView)
 {
+    if (!desc.textureComponentMapping.isIdentity())
+        SLANG_UNIMPLEMENTED_X("Texture component mapping not supported");
+
     auto resourceImpl = static_cast<TextureResourceImpl*>(texture);
 
     // TODO: actually do something?

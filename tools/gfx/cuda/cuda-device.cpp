@@ -900,6 +900,9 @@ SLANG_NO_THROW Result SLANG_MCALL DeviceImpl::createTextureFromSharedHandle(
 SLANG_NO_THROW Result SLANG_MCALL DeviceImpl::createTextureView(
     ITextureResource* texture, IResourceView::Desc const& desc, IResourceView** outView)
 {
+    if (!desc.textureComponentMapping.isIdentity())
+        SLANG_UNIMPLEMENTED_X("Texture component mapping not supported");
+
     RefPtr<ResourceViewImpl> view = new ResourceViewImpl();
     view->m_desc = desc;
     view->textureResource = dynamic_cast<TextureResourceImpl*>(texture);

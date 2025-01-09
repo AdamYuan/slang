@@ -1361,6 +1361,9 @@ Result DeviceImpl::createSamplerState(ISamplerState::Desc const& desc, ISamplerS
 Result DeviceImpl::createTextureView(
     ITextureResource* texture, IResourceView::Desc const& desc, IResourceView** outView)
 {
+    if (!desc.textureComponentMapping.isIdentity())
+        SLANG_UNIMPLEMENTED_X("Texture component mapping not supported");
+
     auto resourceImpl = (TextureResourceImpl*)texture;
 
     RefPtr<ResourceViewImpl> viewImpl = new ResourceViewImpl();

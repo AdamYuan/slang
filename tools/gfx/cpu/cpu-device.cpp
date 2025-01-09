@@ -89,6 +89,9 @@ namespace cpu
     SLANG_NO_THROW Result SLANG_MCALL DeviceImpl::createTextureView(
         ITextureResource* inTexture, IResourceView::Desc const& desc, IResourceView** outView)
     {
+        if (!desc.textureComponentMapping.isIdentity())
+            SLANG_UNIMPLEMENTED_X("Texture component mapping not supported");
+
         auto texture = static_cast<TextureResourceImpl*>(inTexture);
         RefPtr<TextureResourceViewImpl> view = new TextureResourceViewImpl(desc, texture);
         returnComPtr(outView, view);

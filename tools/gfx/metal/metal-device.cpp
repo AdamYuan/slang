@@ -573,6 +573,9 @@ Result DeviceImpl::createTextureView(
 {
     AUTORELEASEPOOL
 
+    if (!desc.textureComponentMapping.isIdentity())
+        SLANG_UNIMPLEMENTED_X("Texture component mapping not supported");
+
     auto textureImpl = static_cast<TextureResourceImpl*>(texture);
     RefPtr<TextureResourceViewImpl> viewImpl = new TextureResourceViewImpl(this);
     viewImpl->m_desc = desc;

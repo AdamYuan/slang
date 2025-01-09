@@ -2048,6 +2048,29 @@ Result DeviceImpl::createTextureView(
         return SLANG_OK;
     }
 
+    const auto getVkComponentSwizzle = [](ComponentSwizzle swizzle)
+    {
+        switch (swizzle)
+        {
+        case ComponentSwizzle::Identity:
+            return VK_COMPONENT_SWIZZLE_IDENTITY;
+        case ComponentSwizzle::Red:
+            return VK_COMPONENT_SWIZZLE_R;
+        case ComponentSwizzle::Green:
+            return VK_COMPONENT_SWIZZLE_G;
+        case ComponentSwizzle::Blue:
+            return VK_COMPONENT_SWIZZLE_B;
+        case ComponentSwizzle::Alpha:
+            return VK_COMPONENT_SWIZZLE_A;
+        case ComponentSwizzle::ForceZero:
+            return VK_COMPONENT_SWIZZLE_ZERO;
+        case ComponentSwizzle::ForceOne:
+            return VK_COMPONENT_SWIZZLE_ONE;
+        default:
+            return VK_COMPONENT_SWIZZLE_IDENTITY;
+        }
+    };
+
     bool isArray = resourceImpl->getDesc()->arraySize > 1;
     VkImageViewCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -2057,10 +2080,10 @@ Result DeviceImpl::createTextureView(
         : resourceImpl->m_vkformat;
     createInfo.image = resourceImpl->m_image;
     createInfo.components = VkComponentMapping{
-        VK_COMPONENT_SWIZZLE_R,
-        VK_COMPONENT_SWIZZLE_G,
-        VK_COMPONENT_SWIZZLE_B,
-        VK_COMPONENT_SWIZZLE_A };
+        getVkComponentSwizzle(desc.textureComponentMapping.r),
+        getVkComponentSwizzle(desc.textureComponentMapping.g),
+        getVkComponentSwizzle(desc.textureComponentMapping.b),
+        getVkComponentSwizzle(desc.textureComponentMapping.a) };
     switch (resourceImpl->getType())
     {
     case IResource::Type::Texture1D:

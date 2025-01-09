@@ -643,6 +643,29 @@ public struct RenderTargetDesc
     public ResourceType shape;
 };
 
+// Same as VkComponentSwizzle
+public enum class ComponentSwizzle {
+    Identity = 0,
+    Red,
+    Green,
+    Blue,
+    Alpha,
+    ForceZero,
+    ForceOne,
+};
+
+// Same as VkComponentMapping
+public struct ComponentMapping
+{
+    public ComponentSwizzle r, g, b, a;
+
+    public bool isIdentity()
+    {
+        return r == ComponentSwizzle::Identity && g == ComponentSwizzle::Identity &&
+               b == ComponentSwizzle::Identity && a == ComponentSwizzle::Identity;
+    }
+};
+
 public struct ResourceViewDesc
 {
     public ResourceViewType type;
@@ -654,6 +677,8 @@ public struct ResourceViewDesc
     public SubresourceRange subresourceRange;
     // Specifies the range of a buffer resource for a ShaderResource/UnorderedAccess view.
     public BufferRange bufferRange;
+    // Specifies texture component mappings.
+    public ComponentMapping textureTomponentMapping;
 };
 
 [COM("7b6c4926-0884-408c-ad8a-50-3a-8e-23-98-a4")]

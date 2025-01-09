@@ -842,6 +842,29 @@ public:
         0x8b8055df, 0x9377, 0x401d, { 0x91, 0xff, 0x3f, 0xa3, 0xbf, 0x66, 0x64, 0xf4 } \
     }
 
+
+// Same as VkComponentSwizzle
+enum class ComponentSwizzle {
+    Identity = 0,
+    Red,
+    Green,
+    Blue,
+    Alpha,
+    ForceZero,
+    ForceOne,
+};
+
+// Same as VkComponentMapping
+struct ComponentMapping {
+    ComponentSwizzle r, g, b, a;
+
+    bool isIdentity() const
+    {
+        return r == ComponentSwizzle::Identity && g == ComponentSwizzle::Identity &&
+               b == ComponentSwizzle::Identity && a == ComponentSwizzle::Identity;
+    }
+};
+
 class IResourceView : public ISlangUnknown
 {
 public:
@@ -875,6 +898,8 @@ public:
         SubresourceRange subresourceRange;
         // Specifies the range of a buffer resource for a ShaderResource/UnorderedAccess view.
         BufferRange bufferRange;
+        // Specifies texture component mappings.
+        ComponentMapping textureComponentMapping;
     };
     virtual SLANG_NO_THROW Desc* SLANG_MCALL getViewDesc() = 0;
 
